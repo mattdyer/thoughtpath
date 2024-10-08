@@ -20,7 +20,7 @@ response = path.get_response(last_item)
 
 print(response)
 
-
+path.make_memories(response)
 
 
 #print(path.find_patterns(prompt))
