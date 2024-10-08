@@ -1,4 +1,4 @@
-from thoughtpath.transformation import Transformation
+from thoughtpath.memory import Memory
 
 class ThoughtPath:
 	
@@ -7,28 +7,79 @@ class ThoughtPath:
 	
 	
 	def start(self):
-		result = self.get_result(self.prompt)
+		self.get_result(self.prompt)
 		
-		print(result)
+		#print(result)
 	
 	
 	def get_result(self, prompt):
 		
-		result = self.transform(prompt)
-		
-		return result
+		self.make_memories(prompt)
+
+		#self.get_memory()
+
+
 	
 	
-	def get_transformation(self, prompt):
+	def make_memories(self, prompt):
+
+		#self.remember(prompt, 'Talk About Something')
+		#self.remember(prompt, prompt)
+
+		previous_letter = ' '
+
+		for letter in prompt:
+			self.remember(letter, previous_letter)
+
+			#print(letter)
+
+			previous_letter = letter
+			previous_value = letter
+
+			first_item = True
+
+			for item in prompt.split(letter):
+
+				#print(item)
+
+				if first_item:
+					remember_item = item
+				else:
+					remember_item = letter + item
+
+				self.remember(remember_item, previous_value)
+				previous_value = remember_item
 		
-		transformation = Transformation(prompt)
+		return item
+
+
+	def get_memory(self):
 		
-		return transformation
+		memory = Memory()
+		
+		return memory
 	
 	
-	def transform(self, prompt):
+	def remember(self, current_value, previous_value):
 		
-		transformation = self.get_transformation(prompt)
+		memory = self.get_memory()
+
+		memory.save_memories(current_value, previous_value)
 		
-		return transformation.get_result()
+	def get_response(self, prompt):
+		memory = self.get_memory()
+
+		response = memory.get_response(prompt)
+
+		return response
+
+
+
+
+	#def find_patterns(self, prompt):
+	#	memory = self.get_memory(prompt, '')
+
+	#	response = memory.get_response(prompt)
+
+	#	return response
 	

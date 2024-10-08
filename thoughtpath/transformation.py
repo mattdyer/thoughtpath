@@ -1,5 +1,7 @@
 import hashlib
+import os
 from os.path import exists
+
 
 class Transformation:
 	
@@ -16,19 +18,33 @@ class Transformation:
 		
 		print(prompt_hash)
 		
-		memory_path = 'memory/' + str(prompt_hash) + '.txt'
+		memory_path = 'memory/' + str(prompt_hash)
 		
-		if(exists(memory_path)):
-			file = open(memory_path,'r')
+		if(not exists(memory_path)):
+			os.mkdir(memory_path)
+		
+		dir_list = os.listdir(memory_path)
+		
+		print(len(dir_list))
+		
+		if(len(dir_list) == 0):
+			save_path = memory_path + '/' + str(prompt_hash) + '.txt'
 			
-			self.result = file.read()
-			
-		else:
-			file = open(memory_path,'w')
+			file = open(save_path,'w')
 			
 			file.write(prompt)
 			
+			file.close()
+			
 			self.result = prompt
+		else:
+			for entry in dir_list:
+				file = open(memory_path + '/' + entry,'r')
+				
+				self.result = file.read()
+				
+				file.close()
+		
 		
 	
 	def get_result(self):
